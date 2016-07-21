@@ -1,41 +1,6 @@
-# Enables support for a docker container-based build
-# which should provide faster startup times and beefier
-# "machines". This is also required in order to use the
-# cache configured below.
-sudo: false
-
-language: java
-jdk:
-  - oraclejdk8
-
-cache:
-  directories:
-    - .cache/bootstrap # See pants.ini [cache.bootstrap]
-    - .cache/pants     # Pants downloaded by scripts/setup-ci-environment.sh
-
-notifications:
-  email:
-    - yic@twitter.com
-    - fedor.korotkov@gmail.com
-
-install: ./scripts/setup-ci-environment.sh
-
-# General policy is to support pants for the past 10 releases and the latest master.
-env:
-  matrix:
-    - IJ_ULTIMATE=false
-    - IJ_ULTIMATE=true
-    - PANTS_SHA="release_1.1.0-pre3" TEST_SET=integration
-    - PANTS_SHA="release_1.1.0-pre2" TEST_SET=integration
-    - PANTS_SHA="release_1.1.0-pre1" TEST_SET=integration
-    - PANTS_SHA="release_1.1.0-pre0" TEST_SET=integration
-    - PANTS_SHA="release_1.0.0" TEST_SET=integration
-    - PANTS_SHA="release_0.0.82" TEST_SET=integration
-    - PANTS_SHA="release_0.0.81" TEST_SET=integration
-
-script:
-  - ./scripts/run-tests-ci.sh
-  # todo: custom integration tests cause Travis-CI builds to hang after enabling caching.
-  # - ./scripts/run-custom-integration.sh
-  #     -r ./.cache/pants
-  #     -t examples/src/scala/org/pantsbuild/example/hello,examples/src/java/org/pantsbuild/example/hello
+{cache: {directories: [.cache/bootstrap, .cache/pants]}, env: {matrix: [IJ_ULTIMATE=false,
+      IJ_ULTIMATE=true, PANTS_SHA="release_1.1.0-pre3" TEST_SET=integration, PANTS_SHA="release_1.1.0-pre2"
+        TEST_SET=integration, PANTS_SHA="release_1.1.0-pre1" TEST_SET=integration]},
+  install: ./scripts/setup-ci-environment.sh, jdk: [oraclejdk8], language: java, notifications: {
+    email: [yic@twitter.com, fedor.korotkov@gmail.com]}, script: [./scripts/run-tests-ci.sh],
+  sudo: false}
