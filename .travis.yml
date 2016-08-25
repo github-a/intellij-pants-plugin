@@ -1,38 +1,6 @@
-sudo: required
-dist: trusty
-
-language: java
-jdk:
-  - oraclejdk8
-
-cache:
-  directories:
-    - .cache/bootstrap # See pants.ini [cache.bootstrap]
-    - .cache/pants     # Pants downloaded by scripts/setup-ci-environment.sh
-
-notifications:
-  email:
-    - yic@twitter.com
-    - fedor.korotkov@gmail.com
-
-install: ./scripts/setup-ci-environment.sh
-
-# General policy is to support pants for the past 10 releases and the latest master.
-env:
-  matrix:
-    - IJ_ULTIMATE=false
-    - IJ_ULTIMATE=true
-    - PANTS_SHA="release_1.2.0-dev3" TEST_SET=jvm-integration
-    - PANTS_SHA="release_1.2.0-dev2" TEST_SET=jvm-integration
-    - PANTS_SHA="release_1.2.0-dev1" TEST_SET=jvm-integration
-    - PANTS_SHA="release_1.1.0-pre5" TEST_SET=jvm-integration
-    - PANTS_SHA="release_1.1.0-pre4" TEST_SET=jvm-integration
-    - PANTS_SHA="release_1.1.0-pre3" TEST_SET=jvm-integration
-    - PANTS_SHA="release_1.1.0-pre2" TEST_SET=jvm-integration
-
-script:
-  - ./scripts/run-tests-ci.sh
-  # todo: custom integration tests cause Travis-CI builds to hang after enabling caching.
-  # - ./scripts/run-custom-integration.sh
-  #     -r ./.cache/pants
-  #     -t examples/src/scala/org/pantsbuild/example/hello,examples/src/java/org/pantsbuild/example/hello
+{cache: {directories: [.cache/bootstrap, .cache/pants]}, dist: trusty, env: {matrix: [
+      IJ_ULTIMATE=false, IJ_ULTIMATE=true, PANTS_SHA="release_1.2.0-dev3" TEST_SET=jvm-integration,
+      PANTS_SHA="release_1.2.0-dev2" TEST_SET=jvm-integration, PANTS_SHA="release_1.2.0-dev1"
+        TEST_SET=jvm-integration]}, install: ./scripts/setup-ci-environment.sh, jdk: [
+    oraclejdk8], language: java, notifications: {email: [yic@twitter.com, fedor.korotkov@gmail.com]},
+  script: [./scripts/run-tests-ci.sh], sudo: required}
